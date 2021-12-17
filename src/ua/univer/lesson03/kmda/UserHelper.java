@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserHelper {
-
-
     public static List<User> getUsersFromURL(String url) throws IOException {
         URL website = new URL(url);
         URLConnection connection = website.openConnection();
@@ -54,5 +52,17 @@ public class UserHelper {
               //  bw.flush();
             }
         }
+    }
+
+    public static void writeUsersToBIN(List<User> users, String filename) throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))){
+        out.writeObject(users);
+        }
+    }
+    public static List<User> getUsersFromBIN(String filename) throws IOException, ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename));
+        List<User> users = (List<User>) in.readObject();
+        in.close();
+        return users;
     }
 }

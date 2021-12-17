@@ -1,9 +1,17 @@
 package ua.univer.lesson03.kmda;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
+    private int id;
     private String name;
     private String position;
     private double salary;
+
+    private static final long serialVersionUID = 1L;
+    public User(){
+
+    }
 
     public User(String name, String position, double salary) {
         this.name = name;
