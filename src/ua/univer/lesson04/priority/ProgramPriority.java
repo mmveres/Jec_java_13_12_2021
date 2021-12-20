@@ -15,27 +15,57 @@ public class ProgramPriority {
         JPanel panel = new JPanel();
         JSlider slider = new JSlider(0,100,50);
         JButton btnLM = new JButton("-");
+        btnLM.addActionListener(e -> {
+            if (thL.getPriority()>Thread.MIN_PRIORITY)
+                thL.setPriority(thL.getPriority()-1);
+            System.out.println("L"+ thL.getPriority());
+        });
         JButton btnLP = new JButton("+");
+        btnLP.addActionListener(e -> {
+            if (thL.getPriority()<Thread.MAX_PRIORITY)
+                thL.setPriority(thL.getPriority()+1);
+            System.out.println("L"+thL.getPriority());
+        });
         JButton btnRP = new JButton("+");
+        btnRP.addActionListener(e -> {
+            if (thR.getPriority()<Thread.MAX_PRIORITY)
+                thR.setPriority(thR.getPriority()+1);
+            System.out.println("R"+thR.getPriority());
+        });
         JButton btnRM = new JButton("-");
+        btnRM.addActionListener(e -> {
+            if (thR.getPriority()>Thread.MIN_PRIORITY)
+                thR.setPriority(thR.getPriority()-1);
+            System.out.println("R"+thR.getPriority());
+        });
         JButton btn = new JButton("Ok");
         JButton btnStop = new JButton("Stop");
+        btnStop.addActionListener((e) -> {
+                thL.interrupt();
+                thR.interrupt();
+        });
         btn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
                 thL = new Thread(() -> {
-                        while(true)
+                        while(!Thread.interrupted())
+                            synchronized (slider){
                             slider.setValue(slider.getValue()-1);
+                        }
                 });
 
                 thR = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        while(true)
+                        while(!Thread.interrupted())
+                            synchronized (slider){
                             slider.setValue(slider.getValue()+1);
+                        }
                     }
                 });
+                thL.setDaemon(true);
+                thR.setDaemon(true);
                 thL.start();
                 thR.start();
             }
@@ -47,7 +77,9 @@ public class ProgramPriority {
         panel.add(btnRP);
         panel.add(btnRM);
         panel.add(btn);
+        panel.add(btnStop);
         win.setContentPane(panel);
         win.setVisible(true);
+        System.out.println("main end");
     }
 }
