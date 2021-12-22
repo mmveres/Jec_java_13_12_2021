@@ -2,7 +2,7 @@ package ua.univer.lesson03.kmda;
 
 import java.io.Serializable;
 
-public class User implements Serializable {
+public class User implements Serializable, Comparable<User> {
     private int id;
     private String name;
     private String position;
@@ -50,5 +50,10 @@ public class User implements Serializable {
                 ", position='" + position + '\'' +
                 ", salary=" + salary +
                 '}';
+    }
+
+    @Override
+    public int compareTo(User o) {
+        return name.compareTo(o.getName());
     }
 }
