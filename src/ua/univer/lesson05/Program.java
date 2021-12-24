@@ -41,6 +41,10 @@ public class Program {
         Collections.sort(users, (o1, o2) -> Double.compare(o1.getSalary(), o2.getSalary()));
         System.out.println(users);
         users.sort(Comparator.comparingDouble(User::getSalary));
+
+        for (User user: users) {
+            System.out.println(user);
+        }
     }
 
     private static void testLambda() {
